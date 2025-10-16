@@ -23,6 +23,15 @@ The result is a robust, high-quality test suite with excellent coverage and muta
 
 ## Installation
 
+### Quick Setup
+
+```bash
+# Run the setup script (recommended)
+./scripts/setup.sh
+```
+
+### Manual Installation
+
 ```bash
 npm install
 ```
