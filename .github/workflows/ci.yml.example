@@ -1,0 +1,88 @@
+# Example GitHub Actions workflow for using Mutant Test Gen JS in CI/CD
+# 
+# To use this:
+# 1. Rename to ci.yml (remove .example)
+# 2. Add OPENAI_API_KEY to your repository secrets
+# 3. Adjust file patterns and settings as needed
+
+name: Mutation Testing with LLM
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  mutation-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run linter
+      run: npm run lint
+
+    - name: Generate tests with mutation testing
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      run: |
+        node cli.js generate src/**/*.js \
+          --target 75 \
+          --iterations 3 \
+          --model gpt-3.5-turbo
+
+    - name: Run generated tests
+      run: npm test
+      continue-on-error: true
+
+    - name: Upload mutation reports
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: mutation-reports
+        path: reports/
+
+    - name: Comment PR with results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const summary = JSON.parse(
+            fs.readFileSync('reports/summary.json', 'utf8')
+          );
+          
+          const comment = `## 🧬 Mutation Testing Results
+          
+          - **Total Files**: ${summary.totalFiles}
+          - **Successful**: ${summary.successful}
+          - **Average Mutation Score**: ${summary.averageMutationScore}%
+          - **Target Reached**: ${summary.targetReached} files
+          - **Total Iterations**: ${summary.totalIterations}
+          
+          📊 [View detailed reports](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+
+# Notes:
+# - Adjust target score and iterations based on your needs
+# - Use gpt-3.5-turbo for cost efficiency in CI
+# - Monitor OpenAI API usage and costs
+# - Consider caching generated tests to reduce API calls
+# - Set timeout appropriately for larger codebases

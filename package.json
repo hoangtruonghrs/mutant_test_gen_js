@@ -1,0 +1,37 @@
+{
+  "name": "mutant_test_gen_js",
+  "version": "1.0.0",
+  "description": "Automated mutation testing with LLM-guided test generation for JavaScript",
+  "main": "src/index.js",
+  "bin": {
+    "mutant-test-gen": "./cli.js"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint src/ examples/ || true",
+    "start": "node cli.js"
+  },
+  "keywords": [
+    "mutation-testing",
+    "test-generation",
+    "llm",
+    "automated-testing",
+    "stryker",
+    "jest"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@stryker-mutator/core": "^9.2.0",
+    "@stryker-mutator/javascript-mutator": "^4.0.0",
+    "commander": "^14.0.1",
+    "dotenv": "^17.2.3",
+    "openai": "^6.3.0",
+    "winston": "^3.18.3"
+  },
+  "devDependencies": {
+    "@stryker-mutator/jest-runner": "^9.2.0",
+    "eslint": "^9.37.0",
+    "jest": "^30.2.0"
+  }
+}
