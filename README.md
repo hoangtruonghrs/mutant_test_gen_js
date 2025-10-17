@@ -24,23 +24,39 @@ The result is a robust, high-quality test suite with excellent coverage and muta
 
 ## Installation
 
-### Quick Setup
+### For Development
 
 ```bash
-# Run the setup script (recommended)
-./scripts/setup.sh
-```
+# 1. Clone repository
+git clone https://github.com/hoangtruonghrs/mutant_test_gen_js.git
+cd mutant_test_gen_js
 
-### Manual Installation
-
-```bash
+# 2. Install dependencies
 npm install
+
+# 3. Link globally (for development)
+npm link
+
+# 4. Verify installation
+mutant-test-gen --help
 ```
+
+### For Production Use
+
+```bash
+# Install globally from npm (when published)
+npm install -g mutant_test_gen_js
+
+# Or use locally in your project
+npm install mutant_test_gen_js
+```
+
+See [INSTALLATION.md](./INSTALLATION.md) for detailed installation instructions.
 
 ## Prerequisites
 
 - Node.js 14 or higher
-- OpenAI or Azure OpenAI API key (set as `OPENAI_API_KEY` environment variable)
+- OpenAI API key OR Azure OpenAI credentials
 
 ## Quick Start
 
@@ -233,15 +249,36 @@ mutant_test_gen_js/
 │   ├── interfaces/            # Interface contracts
 │   ├── utils/                 # Shared utilities
 │   └── application.js         # Main application
+├── tests/                     # Test suite
+│   ├── entities/             # Entity unit tests
+│   ├── services/             # Service unit tests
+│   ├── mocks/                # Mock adapters
+│   ├── fixtures/             # Test data
+│   └── helpers/              # Test utilities
+├── docs/
+│   ├── testing/              # Testing documentation
+│   │   ├── README.md         # Testing overview
+│   │   ├── PHASE1_PROGRESS.md
+│   │   └── ...
+│   ├── ARCHITECTURE.md       # System architecture
+│   ├── API.md                # API reference
+│   └── TROUBLESHOOTING.md
 ├── config/
 │   └── default.config.js      # Default configuration
 ├── examples/                  # Example source files
-├── tests/                     # Generated tests
 ├── reports/                   # Mutation reports
 ├── index.js                   # Public API exports
-└── cli.js                     # CLI interface
+├── cli.js                     # CLI interface
 └── package.json
 ```
+
+## Documentation
+
+- **[Architecture](./docs/ARCHITECTURE.md)** - System design and Clean Architecture implementation
+- **[API Reference](./docs/API.md)** - Detailed API documentation
+- **[Testing](./docs/testing/README.md)** - Testing documentation and progress (171 tests, 20.66% coverage)
+- **[Troubleshooting](./docs/TROUBLESHOOTING.md)** - Common issues and solutions
+- **[Installation](./docs/INSTALLATION.md)** - Detailed installation guide
 
 ## Examples
 

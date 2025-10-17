@@ -27,9 +27,9 @@ const FeedbackLoopService = require('./lib/core/services/feedback-loop-service')
 // Adapters
 const LLMAdapterFactory = require('./lib/adapters/llm/llm-adapter-factory');
 const OpenAIAdapter = require('./lib/adapters/llm/openai-adapter');
-const AzureOpenAIAdapter = require('./lib/adapters/llm/azure-openai-adapter');
+const AzureOpenAIAdapter = require('./lib/adapters/llm/azure-adapter');
 const StrykerAdapter = require('./lib/adapters/mutation/stryker-adapter');
-const FileSystemStorage = require('./lib/adapters/storage/filesystem-storage');
+const FileSystemStorage = require('./lib/adapters/storage/fs-storage');
 
 module.exports = {
   // Main application factory

@@ -4,42 +4,44 @@
 
 Implement an automated system using LLMs and mutation testing in a feedback loop to generate unit tests for JavaScript repositories, inspired by Meta's M-GUiTAr.
 
-## ✅ Implementation Status: COMPLETE
+## ✅ Implementation Status: COMPLETE (Refactored with Clean Architecture)
 
-All requirements from the problem statement have been successfully implemented.
+All requirements have been successfully implemented with a modern, scalable architecture.
 
 ## 📦 What Was Built
 
-### Core System Components
+### Core System Components (Clean Architecture)
 
-1. **LLM Integration Module** (`src/llm/openai-client.js`)
-   - OpenAI API integration
-   - Intelligent prompt engineering for test generation
-   - Feedback-based test improvement
-   - Code extraction from LLM responses
+1. **Domain Entities** (`lib/core/entities/`)
+   - `SourceFile`: Source code representation with analysis
+   - `TestFile`: Test file management with test case extraction
+   - `MutationResult`: Mutation testing results encapsulation
+   - `GenerationSession`: Test generation session tracking
 
-2. **Mutation Testing Engine** (`src/core/mutation-engine.js`)
-   - Stryker integration via CLI
-   - Mutation score calculation
-   - Survived/killed mutant tracking
-   - Report generation (JSON and HTML)
+2. **Business Services** (`lib/core/services/`)
+   - `TestGenerationService`: LLM-based test generation orchestration
+   - `MutationAnalysisService`: Mutation testing analysis and recommendations
+   - `FeedbackLoopService`: Iterative improvement workflow with analytics
 
-3. **Test Generator** (`src/core/test-generator.js`)
-   - Feedback loop orchestration
-   - Test file management
-   - Intelligent test merging
-   - Multi-file processing
+3. **Use Cases** (`lib/core/use-cases/`)
+   - `GenerateTestsUseCase`: Single file test generation workflow
+   - `ImproveTestsUseCase`: Test improvement workflow
+   - `BatchProcessUseCase`: Concurrent multi-file processing
 
-4. **Main Orchestrator** (`src/index.js`)
-   - File resolution (glob patterns)
+4. **Adapters** (`lib/adapters/`)
+   - **LLM Adapters**: OpenAI and Azure OpenAI integration
+   - **Mutation Engine**: Stryker CLI integration
+   - **Storage**: FileSystem operations abstraction
+
+5. **Application Layer** (`lib/application.js`)
+   - Dependency injection container
    - Component initialization
-   - Workflow coordination
-   - Summary report generation
+   - Configuration management
+   - High-level API
 
-5. **Utilities** (`src/utils/`)
+6. **Utilities** (`lib/utils/`)
    - Structured logging with Winston
-   - Console and file output
-   - Configurable log levels
+   - Configurable output formats
 
 ### User Interface
 
@@ -47,12 +49,14 @@ All requirements from the problem statement have been successfully implemented.
    - `generate` command: Generate tests for source files
    - `init` command: Initialize configuration file
    - Command-line options for customization
-   - Help and version commands
+   - Support for single file and batch processing
 
-2. **Programmatic API**
-   - JavaScript API for integration
-   - Configuration system
-   - Event-driven workflow
+2. **Programmatic API** (`index.js`)
+   - Clean, modern JavaScript API
+   - Factory pattern for application creation
+   - Fluent interface for operations
+   - Comprehensive result objects
+   - Support for OpenAI and Azure OpenAI
 
 ### Configuration System
 
@@ -175,34 +179,61 @@ All requirements from the problem statement have been successfully implemented.
 ### Quick Start
 
 ```bash
-# 1. Run setup
-./scripts/setup.sh
+# 1. Install dependencies
+npm install
 
-# 2. Set API key
+# 2. Set API key (OpenAI)
 export OPENAI_API_KEY=your-key-here
 
+# OR use Azure OpenAI
+export AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com
+export AZURE_OPENAI_DEPLOYMENT_NAME=your-deployment
+export AZURE_OPENAI_API_VERSION=2024-02-15-preview
+
 # 3. Generate tests
-node cli.js generate examples/calculator.js
+mutant-test-gen generate examples/calculator.js
 
 # 4. View results
 cat tests/calculator.test.js
-open reports/mutation/mutation.html
 ```
 
 ### Usage Examples
 
 ```bash
-# Generate with custom target
-node cli.js generate src/file.js --target 90
+# Single file with feedback loop
+mutant-test-gen generate src/file.js --target 90 --iterations 3
+
+# Batch processing
+mutant-test-gen generate "src/**/*.js"
 
 # Use GPT-3.5 (faster/cheaper)
-node cli.js generate src/*.js --model gpt-3.5-turbo
-
-# More iterations for better results
-node cli.js generate src/file.js --iterations 7
+mutant-test-gen generate src/*.js --model gpt-3.5-turbo
 
 # Custom configuration
-node cli.js generate src/*.js --config my-config.js
+mutant-test-gen generate src/*.js --config my-config.js
+```
+
+### Programmatic Usage
+
+```javascript
+const { createApplication } = require('mutant_test_gen_js');
+
+const app = createApplication({
+  llm: {
+    provider: 'azure', // or 'openai'
+    model: 'gpt-4',
+    azure: {
+      endpoint: process.env.AZURE_OPENAI_ENDPOINT,
+      deploymentName: process.env.AZURE_OPENAI_DEPLOYMENT_NAME
+    }
+  }
+});
+
+await app.generateTests({
+  sourcePath: 'src/file.js',
+  outputPath: 'tests/file.test.js',
+  useFeedbackLoop: true
+});
 ```
 
 ## 📈 Expected Results
@@ -243,37 +274,40 @@ The architecture supports these planned features:
 ## 📝 Key Files
 
 ```
+Architecture:
+  lib/application.js            - Main application with DI
+  lib/core/entities/            - Domain models
+  lib/core/services/            - Business logic services
+  lib/core/use-cases/           - Application workflows
+  lib/adapters/                 - External integrations
+  lib/interfaces/               - Interface contracts
+  lib/utils/                    - Shared utilities
+
 Configuration:
   config/default.config.js      - Default settings
   .env.example                  - Environment template
   jest.config.js                - Jest configuration
   eslint.config.js              - ESLint rules
 
-Source Code:
-  src/index.js                  - Main orchestrator
-  src/core/mutation-engine.js   - Mutation testing
-  src/core/test-generator.js    - Test generation loop
-  src/llm/openai-client.js      - LLM integration
-  src/utils/logger.js           - Logging utility
-
 Interface:
+  index.js                      - Public API exports
   cli.js                        - CLI interface
 
 Documentation:
   README.md                     - Main documentation
-  docs/QUICKSTART.md           - Getting started
-  docs/ARCHITECTURE.md         - System design
-  docs/API.md                  - API reference
-  docs/TROUBLESHOOTING.md      - Problem solving
+  docs/QUICKSTART.md            - Getting started
+  docs/ARCHITECTURE.md          - Clean Architecture guide
+  docs/API.md                   - API reference
+  docs/TROUBLESHOOTING.md       - Problem solving
+  PROJECT_SUMMARY.md            - This file
 
 Examples:
   examples/calculator.js        - Demo source file
   examples/string-utils.js      - Demo utilities
-  examples/usage-example.js     - Programmatic usage
+  examples/usage-example.js     - Programmatic usage (supports both providers)
 
 Helpers:
-  scripts/setup.sh             - Automated setup
-  .github/workflows/ci.yml.example - CI/CD template
+  scripts/setup.sh              - Automated setup
 ```
 
 ## 🎓 Design Principles
@@ -312,6 +346,8 @@ The implementation successfully automates test generation using LLMs and mutatio
 
 ---
 
-**Status**: ✅ COMPLETE  
-**Version**: 1.0.0  
-**Date**: October 16, 2024
+**Status**: ✅ COMPLETE (Refactored with Clean Architecture)  
+**Version**: 2.0.0  
+**Architecture**: Clean Architecture + Domain-Driven Design  
+**Providers**: OpenAI & Azure OpenAI  
+**Date**: October 17, 2025
