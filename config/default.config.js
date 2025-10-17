@@ -4,21 +4,30 @@
 module.exports = {
   // LLM Configuration
   llm: {
-    provider: 'openai',
+    provider: 'openai', // 'openai' or 'azure'
     model: 'gpt-4',
     temperature: 0.7,
     maxTokens: 2000,
     apiKey: process.env.OPENAI_API_KEY || '',
+    
+    // Azure OpenAI specific configuration
+    azure: {
+      endpoint: process.env.AZURE_OPENAI_ENDPOINT || '',
+      apiVersion: process.env.AZURE_OPENAI_API_VERSION || '2024-02-15-preview',
+      deploymentName: process.env.AZURE_OPENAI_DEPLOYMENT_NAME || '',
+    },
   },
 
-  // Mutation Testing Configuration
-  mutationTesting: {
+  // Mutation Testing Configuration  
+  mutation: {
     framework: 'stryker',
-    targetMutationScore: 80, // Target mutation score percentage
-    maxIterations: 5, // Maximum feedback loop iterations
+    testRunner: 'jest',
+    timeout: 60000,
+    reporters: ['clear-text', 'progress'],
+    tempDirName: 'stryker-tmp',
     mutators: [
       'ArithmeticOperator',
-      'ArrayDeclaration',
+      'ArrayDeclaration', 
       'BlockStatement',
       'BooleanLiteral',
       'ConditionalExpression',
@@ -30,12 +39,16 @@ module.exports = {
   },
 
   // Test Generation Configuration
-  testGeneration: {
-    framework: 'jest',
-    testFilePattern: '**/*.test.js',
-    sourceFilePattern: 'src/**/*.js',
-    outputDir: 'tests',
-    batchSize: 3, // Number of tests to generate per iteration
+  targetMutationScore: 80, // Target mutation score percentage
+  maxIterations: 5, // Maximum feedback loop iterations
+  useFeedbackLoop: false, // Use iterative improvement by default
+  runMutationAnalysis: true, // Run mutation analysis after generation
+  concurrency: 3, // Concurrent processing limit
+
+  // Storage Configuration
+  storage: {
+    type: 'filesystem',
+    encoding: 'utf8'
   },
 
   // Logging Configuration
@@ -43,12 +56,13 @@ module.exports = {
     level: 'info',
     file: 'logs/mutation-testing.log',
     console: true,
+    format: 'json'
   },
 
   // Paths
   paths: {
     source: 'src',
-    tests: 'tests',
+    output: 'tests',
     reports: 'reports',
   },
 };

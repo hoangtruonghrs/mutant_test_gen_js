@@ -3,7 +3,7 @@
 const { Command } = require('commander');
 const path = require('path');
 const fs = require('fs');
-const MutantTestGenJS = require('./src/index');
+const { createApplication } = require('./index');
 const defaultConfig = require('./config/default.config');
 
 const program = new Command();
@@ -36,28 +36,79 @@ program
 
       // Override with CLI options
       if (options.target) {
-        config.mutationTesting.targetMutationScore = parseInt(options.target, 10);
+        config.targetMutationScore = parseInt(options.target, 10);
       }
       if (options.iterations) {
-        config.mutationTesting.maxIterations = parseInt(options.iterations, 10);
+        config.maxIterations = parseInt(options.iterations, 10);
       }
       if (options.model) {
         config.llm.model = options.model;
       }
 
-      // Initialize and run
-      const mutantTestGen = new MutantTestGenJS(config);
-      const result = await mutantTestGen.run(files);
+      // Initialize application
+      const app = createApplication(config);
+
+      // Determine if single file or batch
+      const isSingleFile = files.length === 1 && !files[0].includes('*') && !files[0].includes('?');
+      
+      let result;
+      if (isSingleFile) {
+        // Single file processing
+        const sourcePath = path.resolve(files[0]);
+        const outputPath = path.join(
+          config.paths.output || 'tests',
+          path.basename(sourcePath, '.js') + '.test.js'
+        );
+        
+        result = await app.generateTests({
+          sourcePath,
+          outputPath,
+          useFeedbackLoop: config.useFeedbackLoop || false,
+          targetMutationScore: config.targetMutationScore,
+          maxIterations: config.maxIterations
+        });
+        
+        result = {
+          success: result.success,
+          summary: {
+            totalFiles: 1,
+            successful: result.success ? 1 : 0,
+            failed: result.success ? 0 : 1
+          }
+        };
+      } else {
+        // Batch processing
+        result = await app.batchProcess({
+          sourcePattern: files.join(','),
+          outputDir: config.paths.output || 'tests',
+          mode: 'generate',
+          concurrency: config.concurrency || 3
+        });
+        
+        result = {
+          success: result.failedFiles === 0,
+          summary: {
+            totalFiles: result.totalFiles,
+            successful: result.successfulFiles,
+            failed: result.failedFiles,
+            duration: result.duration
+          }
+        };
+      }
 
       if (result.success) {
         console.log('\n✓ Test generation completed successfully!');
         console.log(`  Total files: ${result.summary.totalFiles}`);
         console.log(`  Successful: ${result.summary.successful}`);
-        console.log(`  Average mutation score: ${result.summary.averageMutationScore}%`);
-        console.log(`  Target reached: ${result.summary.targetReached} files`);
+        console.log(`  Failed: ${result.summary.failed}`);
+        if (result.summary.duration) {
+          console.log(`  Duration: ${Math.floor(result.summary.duration / 1000)}s`);
+        }
+        await app.cleanup();
         process.exit(0);
       } else {
-        console.error('\n✗ Test generation failed:', result.message);
+        console.error('\n✗ Test generation failed');
+        await app.cleanup();
         process.exit(1);
       }
     } catch (error) {

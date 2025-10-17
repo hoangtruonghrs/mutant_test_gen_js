@@ -2,7 +2,7 @@
   "name": "mutant_test_gen_js",
   "version": "1.0.0",
   "description": "Automated mutation testing with LLM-guided test generation for JavaScript",
-  "main": "src/index.js",
+  "main": "index.js",
   "bin": {
     "mutant-test-gen": "./cli.js"
   },
@@ -26,6 +26,7 @@
     "@stryker-mutator/javascript-mutator": "^4.0.0",
     "commander": "^14.0.1",
     "dotenv": "^17.2.3",
+    "glob": "^10.3.10",
     "openai": "^6.3.0",
     "winston": "^3.18.3"
   },

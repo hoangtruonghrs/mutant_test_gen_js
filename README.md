@@ -1,12 +1,12 @@
 # Mutant Test Gen JS
 
-An automated system using LLMs and mutation testing in a feedback loop to generate high-quality unit tests for JavaScript projects. Inspired by Meta's M-GUiTAr.
+An automated system using LLMs and mutation testing in a feedback loop to generate high-quality unit tests for JavaScript projects. Built with Clean Architecture principles for scalability and maintainability.
 
 ## Overview
 
 This project automates test generation by:
-1. Using LLMs (Large Language Models) to generate initial unit tests
-2. Running mutation testing to identify weaknesses
+1. Using LLMs (OpenAI/Azure OpenAI) to generate initial unit tests
+2. Running mutation testing (Stryker) to identify weaknesses
 3. Iteratively improving tests based on survived mutants
 4. Continuing until target mutation score is reached
 
@@ -14,11 +14,12 @@ The result is a robust, high-quality test suite with excellent coverage and muta
 
 ## Features
 
-- 🤖 **LLM-Powered Test Generation**: Uses OpenAI's GPT models to generate comprehensive unit tests
+- 🤖 **Multi-Provider LLM Support**: Works with both OpenAI and Azure OpenAI
 - 🧬 **Mutation Testing**: Integrates with Stryker for JavaScript mutation testing
 - 🔄 **Feedback Loop**: Automatically improves tests based on mutation testing results
-- 📊 **Detailed Reports**: Generates comprehensive reports on mutation scores and test quality
-- ⚙️ **Configurable**: Flexible configuration for target scores, iterations, and more
+- 📊 **Detailed Analytics**: Comprehensive mutation analysis and recommendations
+- ⚙️ **Clean Architecture**: Modular, testable, and maintainable codebase
+- 🚀 **Batch Processing**: Process multiple files concurrently
 - 🎯 **Target-Driven**: Continues iterating until desired mutation score is achieved
 
 ## Installation
@@ -39,59 +40,90 @@ npm install
 ## Prerequisites
 
 - Node.js 14 or higher
-- OpenAI API key (set as `OPENAI_API_KEY` environment variable)
+- OpenAI or Azure OpenAI API key (set as `OPENAI_API_KEY` environment variable)
 
 ## Quick Start
 
-1. Set your OpenAI API key:
+### 1. Set up your LLM provider
+
+#### Using OpenAI
+
 ```bash
 export OPENAI_API_KEY=your-api-key-here
 ```
 
-2. Generate tests for a source file:
+#### Using Azure OpenAI
+
 ```bash
-node cli.js generate examples/calculator.js
+export AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com
+export AZURE_OPENAI_DEPLOYMENT_NAME=your-deployment-name
+export AZURE_OPENAI_API_VERSION=2024-02-15-preview
 ```
 
-3. Generate tests for multiple files:
+### 2. Generate tests
+
+#### Single file:
 ```bash
-node cli.js generate examples/*.js
+mutant-test-gen generate examples/calculator.js
+```
+
+#### Multiple files:
+```bash
+mutant-test-gen generate "src/**/*.js"
+```
+
+#### With options:
+```bash
+mutant-test-gen generate examples/calculator.js \
+  --target 90 \
+  --iterations 3 \
+  --model gpt-4
 ```
 
 ## Configuration
 
-Create a configuration file:
+Initialize a configuration file:
 
 ```bash
-node cli.js init
+mutant-test-gen init
 ```
 
-This creates `mutant-test-gen.config.js` with default settings. You can customize:
-
-- **Target Mutation Score**: Desired mutation score percentage (default: 80%)
-- **Max Iterations**: Maximum feedback loop iterations (default: 5)
-- **LLM Model**: OpenAI model to use (default: gpt-4)
-- **Test Framework**: Testing framework (default: Jest)
-- **Mutators**: Which mutation operators to apply
-
-Example configuration:
+### Configuration Options
 
 ```javascript
 module.exports = {
+  // LLM Provider
   llm: {
-    provider: 'openai',
+    provider: 'openai',  // 'openai' or 'azure'
     model: 'gpt-4',
     temperature: 0.7,
     maxTokens: 2000,
+    apiKey: process.env.OPENAI_API_KEY,
+    
+    // Azure OpenAI (if provider is 'azure')
+    azure: {
+      endpoint: process.env.AZURE_OPENAI_ENDPOINT,
+      apiVersion: '2024-02-15-preview',
+      deploymentName: process.env.AZURE_OPENAI_DEPLOYMENT_NAME,
+    },
   },
-  mutationTesting: {
-    targetMutationScore: 80,
-    maxIterations: 5,
-    mutators: ['ArithmeticOperator', 'LogicalOperator', ...],
+
+  // Mutation Testing
+  mutation: {
+    testRunner: 'jest',
+    timeout: 60000,
   },
-  testGeneration: {
-    framework: 'jest',
-    outputDir: 'tests',
+
+  // Generation Settings
+  targetMutationScore: 80,
+  maxIterations: 5,
+  useFeedbackLoop: false,
+  concurrency: 3,
+
+  // Paths
+  paths: {
+    output: 'tests',
+    reports: 'reports',
   },
 };
 ```
@@ -140,15 +172,35 @@ Options:
 ### Programmatic API
 
 ```javascript
-const MutantTestGenJS = require('./src/index');
-const config = require('./config/default.config');
+const { createApplication } = require('mutant_test_gen_js');
 
-const mutantTestGen = new MutantTestGenJS(config);
+// Create application instance
+const app = createApplication({
+  llm: {
+    provider: 'openai',
+    apiKey: process.env.OPENAI_API_KEY,
+    model: 'gpt-4'
+  }
+});
 
-// Generate tests for files
-const result = await mutantTestGen.run(['src/calculator.js']);
+// Generate tests for a single file
+const result = await app.generateTests({
+  sourcePath: 'src/calculator.js',
+  outputPath: 'tests/calculator.test.js',
+  useFeedbackLoop: true,
+  targetMutationScore: 80
+});
 
-console.log(`Average mutation score: ${result.summary.averageMutationScore}%`);
+// Batch processing
+const batchResult = await app.batchProcess({
+  sourcePattern: 'src/**/*.js',
+  outputDir: 'tests',
+  mode: 'generate',
+  concurrency: 3
+});
+
+// Cleanup
+await app.cleanup();
 ```
 
 ## How It Works
@@ -169,23 +221,25 @@ console.log(`Average mutation score: ${result.summary.averageMutationScore}%`);
 
 ```
 mutant_test_gen_js/
-├── src/
+├── lib/
+│   ├── adapters/               # External service adapters
+│   │   ├── llm/               # LLM providers (OpenAI, Azure)
+│   │   ├── mutation/          # Mutation testing (Stryker)
+│   │   └── storage/           # Storage providers
 │   ├── core/
-│   │   ├── mutation-engine.js    # Mutation testing orchestration
-│   │   └── test-generator.js     # Test generation with feedback loop
-│   ├── llm/
-│   │   └── openai-client.js      # OpenAI API integration
-│   ├── utils/
-│   │   └── logger.js             # Logging utility
-│   └── index.js                  # Main orchestrator
+│   │   ├── entities/          # Domain entities
+│   │   ├── services/          # Business logic services
+│   │   └── use-cases/         # Application use cases
+│   ├── interfaces/            # Interface contracts
+│   ├── utils/                 # Shared utilities
+│   └── application.js         # Main application
 ├── config/
-│   └── default.config.js         # Default configuration
-├── examples/
-│   ├── calculator.js             # Example source file
-│   └── string-utils.js           # Example source file
-├── tests/                        # Generated tests
-├── reports/                      # Mutation testing reports
-├── cli.js                        # CLI interface
+│   └── default.config.js      # Default configuration
+├── examples/                  # Example source files
+├── tests/                     # Generated tests
+├── reports/                   # Mutation reports
+├── index.js                   # Public API exports
+└── cli.js                     # CLI interface
 └── package.json
 ```
 
