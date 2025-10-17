@@ -81,16 +81,25 @@ export AZURE_OPENAI_API_VERSION=2024-02-15-preview
 #### Single file:
 ```bash
 mutant-test-gen generate examples/calculator.js
+# Output: tests/calculator.test.js
+```
+
+#### Specify output directory:
+```bash
+mutant-test-gen generate examples/calculator.js --output my-tests
+# Output: my-tests/calculator.test.js
 ```
 
 #### Multiple files:
 ```bash
 mutant-test-gen generate "src/**/*.js"
+# Output: tests/*.test.js
 ```
 
 #### With options:
 ```bash
 mutant-test-gen generate examples/calculator.js \
+  --output tests \
   --target 90 \
   --iterations 3 \
   --model gpt-4
@@ -151,39 +160,45 @@ module.exports = {
 #### Generate Tests
 
 ```bash
-node cli.js generate <files...> [options]
+mutant-test-gen generate <files...> [options]
 ```
 
 Options:
 - `-c, --config <path>`: Path to configuration file
-- `-t, --target <score>`: Target mutation score (0-100)
-- `-i, --iterations <count>`: Maximum feedback iterations
-- `-m, --model <name>`: LLM model to use
+- `-o, --output <dir>`: Output directory for generated tests (default: tests)
+- `-t, --target <score>`: Target mutation score (0-100, default: 80)
+- `-i, --iterations <count>`: Maximum feedback iterations (default: 5)
+- `-m, --model <name>`: LLM model to use (default: gpt-4)
 
 Examples:
 
 ```bash
 # Generate tests for a single file
-node cli.js generate src/calculator.js
+mutant-test-gen generate src/calculator.js
+# → Output: tests/calculator.test.js
+
+# Specify output directory
+mutant-test-gen generate src/calculator.js --output my-tests
+# → Output: my-tests/calculator.test.js
 
 # Generate with custom target score
-node cli.js generate src/*.js --target 90
+mutant-test-gen generate src/*.js --target 90
 
 # Use custom configuration
-node cli.js generate src/*.js --config ./my-config.js
+mutant-test-gen generate src/*.js --config ./my-config.js
 
 # Use GPT-3.5 for faster/cheaper generation
-node cli.js generate src/*.js --model gpt-3.5-turbo
+mutant-test-gen generate src/*.js --model gpt-3.5-turbo
 ```
 
 #### Initialize Configuration
 
 ```bash
-node cli.js init [options]
+mutant-test-gen init [options]
 ```
 
 Options:
-- `-o, --output <path>`: Output path for config file
+- `-o, --output <path>`: Output path for config file (default: mutant-test-gen.config.js)
 
 ### Programmatic API
 
@@ -217,6 +232,45 @@ const batchResult = await app.batchProcess({
 
 // Cleanup
 await app.cleanup();
+```
+
+## Output Structure
+
+When you run `mutant-test-gen generate`, the tool creates test files in the specified output directory:
+
+```
+your-project/
+├── src/
+│   ├── calculator.js          # Your source file
+│   └── utils.js              # Another source file
+├── tests/                     # Default output directory
+│   ├── calculator.test.js    # Generated test
+│   └── utils.test.js         # Generated test
+└── reports/                   # Mutation reports (optional)
+    └── mutation-report.json
+```
+
+### Generated Test File Example
+
+```javascript
+// tests/calculator.test.js
+const { add, subtract, multiply } = require('../src/calculator');
+
+describe('Calculator', () => {
+  describe('add', () => {
+    test('should add two positive numbers', () => {
+      expect(add(2, 3)).toBe(5);
+    });
+    
+    test('should handle negative numbers', () => {
+      expect(add(-2, -3)).toBe(-5);
+    });
+    
+    // ... more test cases
+  });
+  
+  // ... more describe blocks
+});
 ```
 
 ## How It Works

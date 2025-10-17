@@ -18,6 +18,7 @@ program
   .description('Generate tests for source files using LLM and mutation testing')
   .argument('<files...>', 'Source file(s) or glob pattern(s) to generate tests for')
   .option('-c, --config <path>', 'Path to configuration file')
+  .option('-o, --output <dir>', 'Output directory for generated tests (default: tests)')
   .option('-t, --target <score>', 'Target mutation score (0-100)', '80')
   .option('-i, --iterations <count>', 'Maximum feedback iterations', '5')
   .option('-m, --model <name>', 'LLM model to use', 'gpt-4')
@@ -35,6 +36,10 @@ program
       }
 
       // Override with CLI options
+      if (options.output) {
+        config.paths = config.paths || {};
+        config.paths.output = options.output;
+      }
       if (options.target) {
         config.targetMutationScore = parseInt(options.target, 10);
       }
@@ -55,10 +60,15 @@ program
       if (isSingleFile) {
         // Single file processing
         const sourcePath = path.resolve(files[0]);
+        const outputDir = config.paths.output || 'tests';
         const outputPath = path.join(
-          config.paths.output || 'tests',
+          outputDir,
           path.basename(sourcePath, '.js') + '.test.js'
         );
+        
+        console.log(`\n📝 Generating tests for: ${sourcePath}`);
+        console.log(`📁 Output directory: ${path.resolve(outputDir)}`);
+        console.log(`📄 Test file: ${path.basename(outputPath)}\n`);
         
         result = await app.generateTests({
           sourcePath,
@@ -70,6 +80,8 @@ program
         
         result = {
           success: result.success,
+          outputPath: path.resolve(outputPath),
+          sourcePath: sourcePath,
           summary: {
             totalFiles: 1,
             successful: result.success ? 1 : 0,
@@ -78,15 +90,21 @@ program
         };
       } else {
         // Batch processing
+        const outputDir = config.paths.output || 'tests';
+        
+        console.log(`\n📝 Batch processing ${files.length} file pattern(s)`);
+        console.log(`📁 Output directory: ${path.resolve(outputDir)}\n`);
+        
         result = await app.batchProcess({
           sourcePattern: files.join(','),
-          outputDir: config.paths.output || 'tests',
+          outputDir: outputDir,
           mode: 'generate',
           concurrency: config.concurrency || 3
         });
         
         result = {
           success: result.failedFiles === 0,
+          outputDir: path.resolve(outputDir),
           summary: {
             totalFiles: result.totalFiles,
             successful: result.successfulFiles,
@@ -97,17 +115,36 @@ program
       }
 
       if (result.success) {
-        console.log('\n✓ Test generation completed successfully!');
+        console.log('\n✅ Test generation completed successfully!');
+        console.log(`\n📊 Summary:`);
         console.log(`  Total files: ${result.summary.totalFiles}`);
         console.log(`  Successful: ${result.summary.successful}`);
         console.log(`  Failed: ${result.summary.failed}`);
         if (result.summary.duration) {
           console.log(`  Duration: ${Math.floor(result.summary.duration / 1000)}s`);
         }
+        
+        if (result.outputPath) {
+          // Single file
+          console.log(`\n📄 Generated test file:`);
+          console.log(`  ${result.outputPath}`);
+        } else if (result.outputDir) {
+          // Batch processing
+          console.log(`\n📁 Tests generated in:`);
+          console.log(`  ${result.outputDir}`);
+        }
+        
+        console.log('\n💡 Next steps:');
+        console.log('  1. Review the generated tests');
+        console.log('  2. Run: npm test');
+        console.log('  3. Adjust tests as needed\n');
+        
         await app.cleanup();
         process.exit(0);
       } else {
-        console.error('\n✗ Test generation failed');
+        console.error('\n❌ Test generation failed');
+        console.error(`  Successful: ${result.summary.successful}/${result.summary.totalFiles}`);
+        console.error(`  Failed: ${result.summary.failed}/${result.summary.totalFiles}\n`);
         await app.cleanup();
         process.exit(1);
       }
