@@ -58,7 +58,9 @@ See [INSTALLATION.md](./INSTALLATION.md) for detailed installation instructions.
 - Node.js 14 or higher
 - OpenAI API key OR Azure OpenAI credentials
 
-## Quick Start
+## 🚀 Quick Start
+
+**New to this project?** Try our [5-Minute Quick Start Guide](./QUICKSTART.md) to generate your first tests with example files!
 
 ### 1. Set up your LLM provider
 
@@ -72,9 +74,18 @@ export OPENAI_API_KEY=your-api-key-here
 
 ```bash
 export AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com
+export AZURE_OPENAI_API_KEY=your-azure-api-key
 export AZURE_OPENAI_DEPLOYMENT_NAME=your-deployment-name
 export AZURE_OPENAI_API_VERSION=2024-02-15-preview
 ```
+
+**Recommended Azure Models for Test Generation** (as of Oct 2025):
+- 🥇 **gpt-4o** or **gpt-4-turbo** - Best balance of quality, speed & cost
+- 🥈 **gpt-4** - Reliable baseline, proven quality
+- 🥉 **gpt-35-turbo** - Cost-effective for simple code
+- � See [Azure Model Guide](./docs/AZURE_MODEL_GUIDE.md) for detailed comparison
+
+> 💡 **Tip**: Start with `gpt-35-turbo` for testing, use `gpt-4o` or `gpt-4-turbo` for production
 
 ### 2. Generate tests
 
@@ -328,11 +339,16 @@ mutant_test_gen_js/
 
 ## Documentation
 
+### 🚀 Getting Started
+- **[Quick Start Guide](./QUICKSTART.md)** - Try it in 5 minutes with example files!
+- **[Installation Guide](./docs/INSTALLATION.md)** - Detailed setup instructions
+- **[Azure Model Guide](./docs/AZURE_MODEL_GUIDE.md)** - Choose the right Azure OpenAI model
+
+### 📖 Reference
 - **[Architecture](./docs/ARCHITECTURE.md)** - System design and Clean Architecture implementation
 - **[API Reference](./docs/API.md)** - Detailed API documentation
 - **[Testing](./docs/testing/README.md)** - Testing documentation and progress (171 tests, 20.66% coverage)
 - **[Troubleshooting](./docs/TROUBLESHOOTING.md)** - Common issues and solutions
-- **[Installation](./docs/INSTALLATION.md)** - Detailed installation guide
 
 ## Examples
 

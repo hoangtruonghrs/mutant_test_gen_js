@@ -6,7 +6,9 @@ Complete documentation for the Mutant Test Generator project.
 
 ### Getting Started
 - **[README](../README.md)** - Project overview, features, and quick start
+- **[Quick Start Guide](../QUICKSTART.md)** - 5-minute tutorial with example files 🚀
 - **[Installation Guide](./INSTALLATION.md)** - Detailed installation instructions for development and production
+- **[Azure Model Guide](./AZURE_MODEL_GUIDE.md)** - Choosing the right Azure OpenAI model 🎯
 
 ### Core Documentation
 - **[Architecture](./ARCHITECTURE.md)** - Clean Architecture implementation, design patterns, and system structure
