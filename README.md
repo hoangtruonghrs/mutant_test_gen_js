@@ -413,10 +413,25 @@ Reports are saved in the `reports/` directory in JSON format.
 - Intelligent test deduplication and merging
 - Custom mutation operators
 
+## 📚 Documentation
+
+- **[Quick Start Guide](QUICKSTART.md)** - Get running in 5 minutes
+- **[Installation Guide](docs/INSTALLATION.md)** - Detailed setup instructions
+- **[Architecture](docs/ARCHITECTURE.md)** - Clean Architecture design and patterns
+- **[API Reference](docs/API.md)** - Programmatic usage documentation
+- **[Workflow Modes](docs/WORKFLOW_MODES.md)** - Simple vs Feedback Loop modes
+- **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
+- **[Azure OpenAI Guide](docs/AZURE_MODEL_GUIDE.md)** - Azure setup and model selection
+- **[Deployment Guide](docs/guides/deployment.md)** - Production deployment checklist
+- **[Enhancement Ideas](docs/guides/enhancements.md)** - Future improvements
+
+📖 **[Full Documentation Index](docs/README.md)**
+
 ## Contributing
 
-Contributions are welcome! Areas for improvement:
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md).
 
+Areas for improvement:
 - Additional language support
 - More sophisticated test merging strategies
 - Performance optimizations
@@ -425,7 +440,7 @@ Contributions are welcome! Areas for improvement:
 
 ## License
 
-ISC
+ISC - See [LICENSE](LICENSE) file for details
 
 ## Acknowledgments
 
@@ -433,4 +448,6 @@ Inspired by Meta's M-GUiTAr (Mutation-Guided Unit Test Auto-generation and Repai
 
 ## Support
 
-For issues, questions, or contributions, please open an issue on the GitHub repository.
+- **[Support Guide](docs/guides/support.md)** - How to get help
+- **[GitHub Issues](https://github.com/hoangtruonghrs/mutant_test_gen_js/issues)** - Report bugs or request features
+- **[Discussions](https://github.com/hoangtruonghrs/mutant_test_gen_js/discussions)** - Ask questions and share ideas
