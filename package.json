@@ -8,8 +8,11 @@
   },
   "scripts": {
     "test": "jest",
-    "lint": "eslint src/ examples/ || true",
-    "start": "node cli.js"
+    "lint": "eslint lib/ examples/ || true",
+    "start": "node cli.js",
+    "preinstall": "node scripts/preinstall.js",
+    "postinstall": "node scripts/postinstall.js",
+    "prepublishOnly": "node -e \"if (!process.env.OPENAI_API_KEY && !process.env.AZURE_OPENAI_ENDPOINT) console.log('Warning: No API keys set for testing')\""
   },
   "keywords": [
     "mutation-testing",
@@ -19,8 +22,20 @@
     "stryker",
     "jest"
   ],
-  "author": "",
+  "author": "hoangtruonghrs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hoangtruonghrs/mutant_test_gen_js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hoangtruonghrs/mutant_test_gen_js/issues"
+  },
+  "homepage": "https://github.com/hoangtruonghrs/mutant_test_gen_js#readme",
   "license": "ISC",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
   "dependencies": {
     "@stryker-mutator/core": "^9.2.0",
     "@stryker-mutator/javascript-mutator": "^4.0.0",

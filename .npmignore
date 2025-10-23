@@ -1,0 +1,60 @@
+# Development files
+tests/
+docs/testing/
+examples/
+scripts/test-azure-openai.js
+*.test.js
+*.spec.js
+
+# Documentation (keep essential docs in package)
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+ENHANCEMENTS.md
+docs/testing/
+docs/PHASE1_PROGRESS.md
+docs/SERVICE_LAYER_PROGRESS.md
+docs/ENTITY_TESTS_SUMMARY.md
+docs/CLI_IMPROVEMENTS.md
+
+# Development config
+.eslintrc*
+eslint.config.js
+jest.config.js
+.prettierrc*
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs and temp
+logs/
+*.log
+.stryker-tmp/
+*.tmp
+.tmp/
+reports/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+.nyc_output/

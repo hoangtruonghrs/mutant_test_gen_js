@@ -5,12 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2024-10-16
+## [1.0.0] - 2025-10-23
 
 ### Added
 
 - Initial release of Mutant Test Gen JS
-- LLM-based test generation using OpenAI GPT models
+- LLM-based test generation using OpenAI and Azure OpenAI
+- Full Azure OpenAI support with deployment configuration
 - Mutation testing integration with Stryker
 - Feedback loop for iterative test improvement
 - CLI interface for easy usage
@@ -47,7 +48,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - JavaScript (ES6+, CommonJS)
 - Jest testing framework
-- OpenAI GPT-4 and GPT-3.5-turbo models
+- OpenAI (GPT-4, GPT-4-turbo, GPT-3.5-turbo)
+- Azure OpenAI Service (all GPT models)
+- Clean Architecture pattern for maintainability
 - Stryker mutation testing framework
 - Node.js 14+
 

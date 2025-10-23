@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// Load environment variables from .env file
+require('dotenv').config();
+
 const { Command } = require('commander');
 const path = require('path');
 const fs = require('fs');
@@ -19,6 +22,7 @@ program
   .argument('<files...>', 'Source file(s) or glob pattern(s) to generate tests for')
   .option('-c, --config <path>', 'Path to configuration file')
   .option('-o, --output <dir>', 'Output directory for generated tests (default: tests)')
+  .option('-f, --feedback', 'Enable feedback loop for iterative test improvement')
   .option('-t, --target <score>', 'Target mutation score (0-100)', '80')
   .option('-i, --iterations <count>', 'Maximum feedback iterations', '5')
   .option('-m, --model <name>', 'LLM model to use', 'gpt-4')
@@ -26,7 +30,7 @@ program
     try {
       // Load configuration
       let config = { ...defaultConfig };
-      
+
       if (options.config) {
         const configPath = path.resolve(options.config);
         if (fs.existsSync(configPath)) {
@@ -39,6 +43,9 @@ program
       if (options.output) {
         config.paths = config.paths || {};
         config.paths.output = options.output;
+      }
+      if (options.feedback) {
+        config.useFeedbackLoop = true;
       }
       if (options.target) {
         config.targetMutationScore = parseInt(options.target, 10);
@@ -55,7 +62,7 @@ program
 
       // Determine if single file or batch
       const isSingleFile = files.length === 1 && !files[0].includes('*') && !files[0].includes('?');
-      
+
       let result;
       if (isSingleFile) {
         // Single file processing
@@ -65,11 +72,11 @@ program
           outputDir,
           path.basename(sourcePath, '.js') + '.test.js'
         );
-        
+
         console.log(`\n📝 Generating tests for: ${sourcePath}`);
         console.log(`📁 Output directory: ${path.resolve(outputDir)}`);
         console.log(`📄 Test file: ${path.basename(outputPath)}\n`);
-        
+
         result = await app.generateTests({
           sourcePath,
           outputPath,
@@ -77,7 +84,7 @@ program
           targetMutationScore: config.targetMutationScore,
           maxIterations: config.maxIterations
         });
-        
+
         result = {
           success: result.success,
           outputPath: path.resolve(outputPath),
@@ -91,17 +98,17 @@ program
       } else {
         // Batch processing
         const outputDir = config.paths.output || 'tests';
-        
+
         console.log(`\n📝 Batch processing ${files.length} file pattern(s)`);
         console.log(`📁 Output directory: ${path.resolve(outputDir)}\n`);
-        
+
         result = await app.batchProcess({
           sourcePattern: files.join(','),
           outputDir: outputDir,
           mode: 'generate',
           concurrency: config.concurrency || 3
         });
-        
+
         result = {
           success: result.failedFiles === 0,
           outputDir: path.resolve(outputDir),
@@ -123,7 +130,7 @@ program
         if (result.summary.duration) {
           console.log(`  Duration: ${Math.floor(result.summary.duration / 1000)}s`);
         }
-        
+
         if (result.outputPath) {
           // Single file
           console.log(`\n📄 Generated test file:`);
@@ -133,12 +140,12 @@ program
           console.log(`\n📁 Tests generated in:`);
           console.log(`  ${result.outputDir}`);
         }
-        
+
         console.log('\n💡 Next steps:');
         console.log('  1. Review the generated tests');
         console.log('  2. Run: npm test');
         console.log('  3. Adjust tests as needed\n');
-        
+
         await app.cleanup();
         process.exit(0);
       } else {
@@ -163,7 +170,7 @@ program
   .option('-o, --output <path>', 'Output path for config file', 'mutant-test-gen.config.js')
   .action((options) => {
     const configPath = path.resolve(options.output);
-    
+
     if (fs.existsSync(configPath)) {
       console.error(`Configuration file already exists at ${configPath}`);
       process.exit(1);
@@ -171,7 +178,7 @@ program
 
     const configContent = `module.exports = ${JSON.stringify(defaultConfig, null, 2)};`;
     fs.writeFileSync(configPath, configContent);
-    
+
     console.log(`✓ Configuration file created at ${configPath}`);
     console.log('\nNext steps:');
     console.log('1. Set your OPENAI_API_KEY environment variable');
