@@ -1,6 +1,8 @@
-# Mutant Test Gen JS
+# Mutant Test Gen
 
-An automated system using LLMs and mutation testing in a feedback loop to generate high-quality unit tests for JavaScript projects. Built with Clean Architecture principles for scalability and maintainability.
+An automated system using LLMs and mutation testing in a feedback loop to generate high-quality unit tests for your projects. Built with Clean Architecture principles for scalability and maintainability.
+
+> **Currently supports:** JavaScript | **Coming soon:** .NET/C#, TypeScript
 
 ## Overview
 
@@ -15,12 +17,24 @@ The result is a robust, high-quality test suite with excellent coverage and muta
 ## Features
 
 - 🤖 **Multi-Provider LLM Support**: Works with both OpenAI and Azure OpenAI
-- 🧬 **Mutation Testing**: Integrates with Stryker for JavaScript mutation testing
+- 🧬 **Mutation Testing**: Integrates with Stryker for JavaScript (Stryker.NET for C# coming soon)
 - 🔄 **Feedback Loop**: Automatically improves tests based on mutation testing results
 - 📊 **Detailed Analytics**: Comprehensive mutation analysis and recommendations
 - ⚙️ **Clean Architecture**: Modular, testable, and maintainable codebase
 - 🚀 **Batch Processing**: Process multiple files concurrently
 - 🎯 **Target-Driven**: Continues iterating until desired mutation score is achieved
+- 🌐 **Multi-Language Ready**: Extensible architecture for multiple programming languages
+
+## Language Support
+
+| Language | Status | Test Framework | Mutation Testing |
+|----------|--------|----------------|------------------|
+| **JavaScript** | ✅ Production Ready | Jest | Stryker |
+| **.NET/C#** | 🚧 [Planned](docs/guides/dotnet-roadmap.md) | xUnit/NUnit/MSTest | Stryker.NET |
+| **TypeScript** | 📋 Roadmap | Jest | Stryker |
+| **Python** | 📋 Future | pytest | mutmut |
+
+> 💡 **Interested in .NET support?** Check out our [.NET Implementation Roadmap](docs/guides/dotnet-roadmap.md)
 
 ## Installation
 

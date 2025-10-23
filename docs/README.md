@@ -1,88 +1,173 @@
-# Documentation Index# Documentation Index
+# Documentation Index# Documentation Index# Documentation Index
 
 
 
-Complete documentation for the Mutant Test Generator project.Complete documentation for the Mutant Test Generator project.
+Complete documentation for the Mutant Test Generator project.
 
 
 
-## 📚 Getting Started## 📚 Main Documentation
+## 📚 Getting StartedComplete documentation for the Mutant Test Generator project.Complete documentation for the Mutant Test Generator project.
 
 
 
-### Quick Links### Getting Started
+### Quick Links
 
-- **[Installation Guide](INSTALLATION.md)** - Detailed setup instructions- **[README](../README.md)** - Project overview, features, and quick start
+- **[Installation Guide](INSTALLATION.md)** - Detailed setup instructions
 
-- **[Quick Start](../QUICKSTART.md)** - Get running in 5 minutes- **[Quick Start Guide](../QUICKSTART.md)** - 5-minute tutorial with example files 🚀
+- **[Quick Start](../QUICKSTART.md)** - Get running in 5 minutes## 📚 Getting Started## 📚 Main Documentation
 
-- **[Troubleshooting](TROUBLESHOOTING.md)** - Common issues and solutions- **[Installation Guide](./INSTALLATION.md)** - Detailed installation instructions for development and production
+- **[Troubleshooting](TROUBLESHOOTING.md)** - Common issues and solutions
 
-- **[Azure Model Guide](./AZURE_MODEL_GUIDE.md)** - Choosing the right Azure OpenAI model 🎯
+
 
 ## 🏗️ Technical Documentation
 
+### Quick Links### Getting Started
+
 ### Core Documentation
 
-### Core Documentation- **[Architecture](./ARCHITECTURE.md)** - Clean Architecture implementation, design patterns, and system structure
+- **[Architecture](ARCHITECTURE.md)** - Clean Architecture design and patterns- **[Installation Guide](INSTALLATION.md)** - Detailed setup instructions- **[README](../README.md)** - Project overview, features, and quick start
 
-- **[Architecture](ARCHITECTURE.md)** - Clean Architecture design and patterns- **[API Reference](./API.md)** - Complete API documentation with examples
+- **[API Reference](API.md)** - Programmatic usage and API documentation
 
-- **[API Reference](API.md)** - Programmatic usage and API documentation- **[Troubleshooting](./TROUBLESHOOTING.md)** - Common issues, error messages, and solutions
+- **[Workflow Modes](WORKFLOW_MODES.md)** - Simple vs Feedback Loop modes- **[Quick Start](../QUICKSTART.md)** - Get running in 5 minutes- **[Quick Start Guide](../QUICKSTART.md)** - 5-minute tutorial with example files 🚀
 
-- **[Workflow Modes](WORKFLOW_MODES.md)** - Simple vs Feedback Loop modes
 
-## 🧪 Testing Documentation
 
-### Platform-Specific
+### Platform-Specific- **[Troubleshooting](TROUBLESHOOTING.md)** - Common issues and solutions- **[Installation Guide](./INSTALLATION.md)** - Detailed installation instructions for development and production
 
-- **[Azure OpenAI Guide](AZURE_MODEL_GUIDE.md)** - Setup and configuration for Azure### Testing Hub
+- **[Azure OpenAI Guide](AZURE_MODEL_GUIDE.md)** - Setup and configuration for Azure
 
-📁 **[Testing Documentation](./testing/README.md)** - Main testing documentation hub
+- **[Azure Model Guide](./AZURE_MODEL_GUIDE.md)** - Choosing the right Azure OpenAI model 🎯
 
 ## 📖 User Guides
 
-### Detailed Reports
+## 🏗️ Technical Documentation
 
-Navigate to [`guides/`](guides/) for detailed guides:- **[Phase 1 Progress](./testing/PHASE1_PROGRESS.md)** - Current implementation status and metrics
+Navigate to [`guides/`](guides/) for detailed guides:
 
-- **[Deployment Guide](guides/deployment.md)** - Production deployment checklist- **[Testing Plan](./testing/TESTING_PLAN.md)** - Overall testing strategy and timeline
+- **[Deployment Guide](guides/deployment.md)** - Production deployment checklist### Core Documentation
 
-- **[Publishing Guide](guides/publishing.md)** - How to publish to npm- **[Entity Tests](./testing/ENTITY_TESTS_SUMMARY.md)** - Entity layer test breakdown (98.63% coverage)
+- **[Publishing Guide](guides/publishing.md)** - How to publish to npm
 
-- **[Enhancement Ideas](guides/enhancements.md)** - Future improvements- **[Service Tests](./testing/SERVICE_LAYER_PROGRESS.md)** - Service layer progress (19.29% coverage)
+- **[Enhancement Ideas](guides/enhancements.md)** - Future improvements### Core Documentation- **[Architecture](./ARCHITECTURE.md)** - Clean Architecture implementation, design patterns, and system structure
 
 - **[Support](guides/support.md)** - Getting help and reporting issues
 
-## 🎯 Quick Stats
+- **[Architecture](ARCHITECTURE.md)** - Clean Architecture design and patterns- **[API Reference](./API.md)** - Complete API documentation with examples
+
+### 🚀 Multi-Language Support
+
+- **[.NET/C# Roadmap](guides/dotnet-roadmap.md)** 📘 Detailed implementation plan (11-16 weeks, 50+ pages)- **[API Reference](API.md)** - Programmatic usage and API documentation- **[Troubleshooting](./TROUBLESHOOTING.md)** - Common issues, error messages, and solutions
+
+- **[.NET Quick Summary](guides/dotnet-quick-summary.md)** 📄 Executive summary and key decisions
+
+- **[Workflow Modes](WORKFLOW_MODES.md)** - Simple vs Feedback Loop modes
 
 ## 📊 Project Reports
 
-```
+## 🧪 Testing Documentation
 
-Navigate to [`reports/`](reports/) for status reports:Total Tests:        171 passing
+Navigate to [`reports/`](reports/) for status reports:
 
-- **[Production Readiness](reports/production-readiness.md)** - Comprehensive production assessmentTest Suites:        5 passing
+- **[Production Readiness](reports/production-readiness.md)** - Comprehensive production assessment### Platform-Specific
 
-Overall Coverage:   20.66%
 
-## 🎯 Documentation StructureEntity Coverage:    98.63% ✅
 
-Service Coverage:   19.29% 🔄
+## 🎯 Documentation Structure- **[Azure OpenAI Guide](AZURE_MODEL_GUIDE.md)** - Setup and configuration for Azure### Testing Hub
 
-``````
+
+
+```📁 **[Testing Documentation](./testing/README.md)** - Main testing documentation hub
 
 docs/
 
-├── README.md                    # This file## 📖 Additional Resources
+├── README.md                    # This file## 📖 User Guides
 
 ├── INSTALLATION.md              # Detailed setup
 
-├── ARCHITECTURE.md              # Technical design### Project Management
+├── ARCHITECTURE.md              # Technical design### Detailed Reports
 
-├── API.md                       # API reference- **[Project Summary](./PROJECT_SUMMARY.md)** - High-level project overview and goals
+├── API.md                       # API reference
 
-├── WORKFLOW_MODES.md            # Usage patterns- **[Changelog](../CHANGELOG.md)** - Version history and release notes
+├── WORKFLOW_MODES.md            # Usage patternsNavigate to [`guides/`](guides/) for detailed guides:- **[Phase 1 Progress](./testing/PHASE1_PROGRESS.md)** - Current implementation status and metrics
+
+├── TROUBLESHOOTING.md           # Problem solving
+
+├── AZURE_MODEL_GUIDE.md         # Azure setup- **[Deployment Guide](guides/deployment.md)** - Production deployment checklist- **[Testing Plan](./testing/TESTING_PLAN.md)** - Overall testing strategy and timeline
+
+│
+
+├── guides/                      # User guides- **[Publishing Guide](guides/publishing.md)** - How to publish to npm- **[Entity Tests](./testing/ENTITY_TESTS_SUMMARY.md)** - Entity layer test breakdown (98.63% coverage)
+
+│   ├── deployment.md
+
+│   ├── publishing.md- **[Enhancement Ideas](guides/enhancements.md)** - Future improvements- **[Service Tests](./testing/SERVICE_LAYER_PROGRESS.md)** - Service layer progress (19.29% coverage)
+
+│   ├── enhancements.md
+
+│   ├── support.md- **[Support](guides/support.md)** - Getting help and reporting issues
+
+│   ├── dotnet-roadmap.md       # .NET implementation plan
+
+│   └── dotnet-quick-summary.md # .NET executive summary## 🎯 Quick Stats
+
+│
+
+└── reports/                     # Status reports## 📊 Project Reports
+
+    └── production-readiness.md
+
+``````
+
+
+
+## 🔗 Quick NavigationNavigate to [`reports/`](reports/) for status reports:Total Tests:        171 passing
+
+
+
+**For Users:**- **[Production Readiness](reports/production-readiness.md)** - Comprehensive production assessmentTest Suites:        5 passing
+
+1. Start with [Quick Start](../QUICKSTART.md)
+
+2. Read [Workflow Modes](WORKFLOW_MODES.md) to understand usageOverall Coverage:   20.66%
+
+3. Check [Troubleshooting](TROUBLESHOOTING.md) if you hit issues
+
+## 🎯 Documentation StructureEntity Coverage:    98.63% ✅
+
+**For Developers:**
+
+1. Review [Architecture](ARCHITECTURE.md) to understand the designService Coverage:   19.29% 🔄
+
+2. Check [API Reference](API.md) for programmatic usage
+
+3. Read [Contributing Guide](../CONTRIBUTING.md) to contribute``````
+
+
+
+**For DevOps:**docs/
+
+1. Follow [Deployment Guide](guides/deployment.md) for production
+
+2. Review [Production Readiness](reports/production-readiness.md) report├── README.md                    # This file## 📖 Additional Resources
+
+
+
+**For Decision Makers:**├── INSTALLATION.md              # Detailed setup
+
+1. See [.NET Quick Summary](guides/dotnet-quick-summary.md) for multi-language roadmap
+
+2. Review [Enhancement Ideas](guides/enhancements.md) for future direction├── ARCHITECTURE.md              # Technical design### Project Management
+
+
+
+---├── API.md                       # API reference- **[Project Summary](./PROJECT_SUMMARY.md)** - High-level project overview and goals
+
+
+
+**Need help?** See [Support Guide](guides/support.md) or [open an issue](https://github.com/hoangtruonghrs/mutant_test_gen_js/issues)├── WORKFLOW_MODES.md            # Usage patterns- **[Changelog](../CHANGELOG.md)** - Version history and release notes
+
 
 ├── TROUBLESHOOTING.md           # Problem solving
 
