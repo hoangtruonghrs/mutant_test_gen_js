@@ -51,7 +51,7 @@ module.exports = {
   targetMutationScore: 80, // Target mutation score percentage
   maxIterations: 5, // Maximum feedback loop iterations
   useFeedbackLoop: false, // Use iterative improvement by default (use --feedback flag to enable)
-  runMutationAnalysis: false, // Run mutation analysis after generation (disabled by default due to path issues)
+  runMutationAnalysis: true, // Run mutation analysis after generation (path resolution now fixed)
   concurrency: 3, // Concurrent processing limit
 
   // Storage Configuration
